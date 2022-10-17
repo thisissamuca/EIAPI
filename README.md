@@ -30,6 +30,9 @@ Tabela de conteúdos
 
 Por meio de recursos e tecnologias das áreas de Computação, Matemática, Ciências da Natureza e Geologia, o objetivo do projeto é inovar e progredir dentro do segmento de inteligência arfiticial, processamento de imagens e visão computacional para a identificação e classificação remota de minerais e rochas.
 
+Todos os arquivos utilizados no projeto se encontram no link abaixo. <br>
+Link: https://drive.google.com/drive/folders/1pHI431Fdt6E6O9dDLIzFAh1tX9t5zS02?usp=sharing (conceder acesso)
+
 # ⭐ Objetivos
 
 A trilha desse projeto é árdua, mas sempre avante! A ideia é relativamente simples, embora trabalhosa, os objetivos que contemplam esse projeto em toda sua plenitude podem ser descritos logo abaixo:
@@ -484,8 +487,8 @@ model.save('/content/drive/MyDrive/EIAPI/models/model_01')
 ## Segundo estudo:
 
 Dividiremos esse estudo em dois casos: "Utilizando o modelo do estudo passado" e "Não utilizando o modelo do estudo passado". <br>
-Link primeiro caso: <br>
-Link segundo caso:
+Link primeiro caso: https://github.com/thisissamuca/EIAPI/blob/main/Estudo_02.ipynb <br>
+Link segundo caso: https://github.com/thisissamuca/EIAPI/blob/main/Estudo_03.ipynb
 
 ### Estratégias:
 
@@ -539,6 +542,15 @@ test_dir = "./test/"
 train_dir = "./train/"
 
 ```
+
+Usaremos o mesmo código do estudo anterior para verificar a quantidade de arquivos no Dataset:
+
+`Train quartz: 600` <br>
+`Validation quartz: 150` <br>
+`---` <br>
+`Train pyrite: 600` <br>
+`Validation pyrite: 150` <br>
+`---`
 
 ### 8) Utilizaremos a mesma otimização e data augmentation, entretanto, vamos modificar alguns números:
 
@@ -741,8 +753,116 @@ Link: https://drive.google.com/file/d/1BGjX15VAo_gSoLf_KtS0S2uac8W4DscH/view?usp
 
 ### Conclusões
 
-- Embora a precisão do modelo seja de 97%, isso não necessariamente indica que o modelo está corretamente aparelhado com a realidade, pois, ao analisar as predições, percebi que há uma "generalização" nas imagens, ou seja, em imagens que apresentam parte Quartzo (silicato ou outro mineral semelhante ao Quartzo) o modelo parece "ignorar" essas feições e considerar ou Quartzo ou Pirita. Esse tipo de comportamento não é interessante, pois não coindiz com a realidade. Veja algumas representações:
+- Embora a precisão do modelo seja de 97%, isso não necessariamente indica que o modelo está corretamente aparelhado com a realidade, pois, ao analisar as predições, percebi que há uma "generalização" nas imagens, ou seja, em imagens que apresentam parte Quartzo (silicato ou outro mineral semelhante ao Quartzo) o modelo parece "ignorar" essas feições e considerar ou Quartzo ou Pirita. Esse tipo de comportamento não é interessante, pois não coindiz com a realidade. Veja algumas representações. Veja que o modelo poderia ter considerado um pouco mais a possibilidade de ser um Quartzo, mas não é isso que ocorre:
 
 <h3 align="center">
-    <img alt="img" src="">
+    <img alt="img" src="https://cdn.discordapp.com/attachments/947611804945776691/1031403451407675442/WhatsApp_Image_2022-10-17_at_00.07.52.jpeg">
 </h3>
+
+<h3 align="center">
+    <img alt="img" src="https://cdn.discordapp.com/attachments/947611804945776691/1031403451629973564/WhatsApp_Image_2022-10-17_at_00.07.53.jpeg">
+</h3>
+
+### Segundo caso (Não utilizando o modelo do primeiro estudo):
+
+### Passos:
+
+### 1) Utilizaremos a maioria das linhas de código do caso anterior.
+
+Vamos usar outro diretório:
+
+```Python
+
+base_dir = '/content/drive/MyDrive/EIAPI/datasets/dataset_ML_03'
+test_dir = "./test/"
+train_dir = "./train/"
+
+```
+
+Usaremos o mesmo código do estudo anterior para verificar a quantidade de arquivos no Dataset:
+
+`Train quartz: 600` <br>
+`Validation quartz: 150` <br>
+`---` <br>
+`Train pyrite: 600` <br>
+`Validation pyrite: 150` <br>
+`---`
+
+### 2) Utilizaremos os mesmos parâmetros do estudo anterior. Iremos modificar apenas o número de epochs:
+
+```Python
+
+epochs = 15
+
+```
+
+### 3) Utilizaremos o mesmo código do estudo anterior para pré-processar os Datasets e selecionar arquivos para validação:
+
+`Found 1200 files belonging to 2 classes.` <br>
+`Found 300 files belonging to 2 classes.` <br>
+`---` <br>
+`Validation Dataset Cardinality: 8` <br>
+`Test Dataset Cardinality: 2` <br>
+
+### 4) Utilizaremos os mesmos códigos para importar, otimizar e preparar o modelo pré-treinado MobilenetV2
+
+### 5) Vamos utilziar um data augmentation:
+
+```Python
+
+data_augmentation = tf.keras.Sequential([
+    tf.keras.layers.RandomFlip('horizontal_and_vertical'),
+    tf.keras.layers.RandomRotation(0.2),
+    tf.keras.layers.RandomZoom(0.2)
+])
+
+```
+
+### 6) Vamos treinar o modelo assim como já fizemos, utilizando os mesmos parâmetros do primeiro estudo. Também iremos re-treina-lo usando os mesmos parâmetros, exceto o número de epochs:
+
+```Python
+
+fine_tune_epochs = 15
+
+```
+
+### 7) Vamos verificar nosso modelo:
+
+```Python
+
+dataset_test_loss, dataset_test_accuracy = model.evaluate(dataset_test)
+
+print('Dataset Test Loss:     %s' % dataset_test_loss)
+print('Dataset Test Accuracy: %s' % dataset_test_accuracy)
+
+```
+
+`Dataset Test Loss:     0.1056627556681633` <br>
+`Dataset Test Accuracy: 0.9591666460037231`
+
+### 8) Vamos utilizar os mesmos códigos para gerar plotagens.
+
+### 9) Vamos salvar o modelo:
+
+```Python
+
+model.save('/content/drive/MyDrive/EIAPI/models/model_03')
+
+```
+
+Vale lembrar que, caso queira acessar o PDF para visualizar o desempenho do modelo, basta acessar o link abaixo.
+Link: https://drive.google.com/file/d/1bRIDQQXz6ISA0YboSQne-RFLD7xGpYPZ/view?usp=sharing
+
+### Conclusões
+
+- Embora o modelo tenha 95% de precisão (menor em relação ao primeiro caso) ele condiz mais com a realidade. Veja algumas representações:
+
+<h3 align="center">
+    <img alt="img" src="https://cdn.discordapp.com/attachments/947611804945776691/1031408708950962196/WhatsApp_Image_2022-10-17_at_00.03.30.jpeg">
+</h3>
+
+<h3 align="center">
+    <img alt="img" src="https://cdn.discordapp.com/attachments/947611804945776691/1031408709357817937/WhatsApp_Image_2022-10-17_at_00.03.29.jpeg">
+</h3>
+
+- Imagens que podem apresentar ou parecer com Quartzo (silicato ou outro mineral semelhante ao Quartzo) o modelo não "ignora" essas feições e interpreta com a possível possibilidade de ser ou parecer com Quartzo, pois bem, isso é mais próximo da realidade em relação ao caso anterior que ignorava essas feições.
